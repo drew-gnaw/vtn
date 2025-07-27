@@ -1,0 +1,25 @@
+{
+  "name": "vtn-express",
+  "version": "1.0.0",
+  "description": "",
+  "author": "Andrew Wang <115036225+drew-gnaw@users.noreply.github.com>",
+  "keywords": [],
+  "license": "ISC",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node ./App.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "http-errors": "^2.0.0",
+    "pino": "^9.7.0",
+    "pino-http": "^10.5.0",
+    "pino-pretty": "^13.0.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
