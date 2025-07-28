@@ -6,4 +6,4 @@ const app = express();
 
 app.use('/resources', resourcesRouter);
 
-export const handler = serverlessExpress({ app });
+export default serverlessExpress({ app });
