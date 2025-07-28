@@ -1,15 +1,10 @@
-import express from 'express'
-import resourcesRouter from './public/routes/resources.route'
+import express from 'express';
+import serverlessExpress from '@vendia/serverless-express';
+import resourcesRouter from './public/routes/resources.route';
 
-// Create the express app
-const app = express()
+const app = express();
 
-app.use("/resources", resourcesRouter)
+app.use('/resources', resourcesRouter);
 
-const server = app.listen(4321, () => {
-  console.log('App is running at http://localhost:4321')
-})
-
-server.on('error', (err) => {
-  console.error('Server failed to start:', err)
-})
+// Export the serverless handler
+export const handler = serverlessExpress({ app });
