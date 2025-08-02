@@ -40,3 +40,10 @@
 .read-the-docs {
   color: #888;
 }
+
+.ResourceList {
+  background-color: #002145;
+  height: 400px;
+  overflow-y: auto;
+}
+
