@@ -57,6 +57,7 @@ export default function ResourceList() {
 
     // Set filter depends on button selected
     const handleFilter = (category: string) => {
+        setResources(sampleResources); // TODO: delete this later
         setFilter(filter === category ? '' : category); 
     };
 
