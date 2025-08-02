@@ -70,12 +70,9 @@ export default function ResourceList() {
                         onClick={() => handleFilter(category)}
                         style={{
                             margin: '5px',
-                            padding: '10px',
+                            padding: '5px',
                             backgroundColor: filter === category ? '#007bff' : '#f8f9fa',
                             color: filter === category ? 'white' : 'black',
-                            border: '1px solid #ccc',
-                            borderRadius: '4px',
-                            cursor: 'pointer'
                         }}
                     >
                         {category}
@@ -84,7 +81,6 @@ export default function ResourceList() {
             </div>
             
             <div className="ResourceList">
-                <h1>Resources List</h1>
                 {filteredResources.map((resource, index) => (
                     <div key={index} style={{ marginBottom: '20px', padding: '20px', border: '5px solid #ccc' }}>
 
