@@ -32,7 +32,7 @@ const sampleResources: Resource[] = [
     {
         title: 'Therapist Directory',
         link: 'https://example-therapist.org',
-        phone: '456-555-1234',
+        phone: '456-575-1234',
         description: 'helps individuals find and connect with therapists',
         categories: ['Mental Health']
     },
