@@ -12,7 +12,9 @@ export default async function handler(req: any, res: any) {
     }
 
     if (req.method === "POST") {
-      const { name, description } = req.body; // adjust to your schema
+      const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+      const { name, description } = body || {};
+
       if (!name || !description) {
         return res.status(400).json({ error: "Missing required fields" });
       }
