@@ -7,16 +7,18 @@
   "license": "ISC",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node ./api/index.ts",
     "build": "tsc"
   },
   "dependencies": {
     "@vendia/serverless-express": "^4.12.6",
+    "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
+    "mongodb": "^6.19.0",
     "pino": "^9.7.0",
     "pino-http": "^10.5.0",
-    "pino-pretty": "^13.0.0"
+    "pino-pretty": "^13.0.0",
+    "vercel": "^46.1.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
