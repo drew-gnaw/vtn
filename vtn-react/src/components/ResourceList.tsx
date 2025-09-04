@@ -25,7 +25,7 @@ const sampleResources: Resource[] = [
     },
     {
         title: 'Housing Authority',
-        phone: '555-HOME',
+        phone: '555-HOME-6789',
         description: 'Affordable housing assistance and resources',
         categories: ['Housing', 'Community Support']
     },
