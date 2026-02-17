@@ -4,7 +4,7 @@ import resourcesHandler from "./api/resources";
 const app = express();
 app.use(express.json());
 
-// Mount your handlers
+// Mount handlers
 app.all("/api/resources", (req: any, res: any) => resourcesHandler(req, res));
 
 app.listen(3000, () => {
