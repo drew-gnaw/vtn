@@ -34,6 +34,8 @@ export default async function handler(req: any, res: any) {
       if (link !== undefined) doc.link = link;
       if (phone_number !== undefined) doc.phone_number = phone_number;
 
+      doc.pending = true;
+
       const result = await collection.insertOne(doc);
       return res.status(201).json({ insertedId: result.insertedId });
     }
