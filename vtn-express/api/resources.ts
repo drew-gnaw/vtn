@@ -14,13 +14,27 @@ export default async function handler(req: any, res: any) {
 
     if (req.method === "POST") {
       const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
-      const { name, description } = body || {};
+      const { name, description, link, phone_number, categories } = body || {};
 
-      if (!name || !description) {
-        return res.status(400).json({ error: "Missing required fields" });
+      if (!name) {
+        return res.status(400).json({ error: "Missing name" });
       }
 
-      const result = await collection.insertOne({ name, description, createdAt: new Date() });
+      if (categories !== undefined && (!Array.isArray(categories) || !categories.every((c) => typeof c === "string"))) {
+        return res.status(400).json({ error: "categories must be an array of strings" });
+      }
+
+      const doc: Record<string, any> = {
+        name,
+        categories: Array.isArray(categories) ? categories : [],
+        createdAt: new Date(),
+      };
+
+      if (description !== undefined) doc.description = description;
+      if (link !== undefined) doc.link = link;
+      if (phone_number !== undefined) doc.phone_number = phone_number;
+
+      const result = await collection.insertOne(doc);
       return res.status(201).json({ insertedId: result.insertedId });
     }
 
