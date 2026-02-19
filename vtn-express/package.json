@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@vendia/serverless-express": "^4.12.6",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "http-errors": "^2.0.0",
@@ -23,6 +24,7 @@
     "vercel": "^46.1.1"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@vercel/node": "^5.3.7",

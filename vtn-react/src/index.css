@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #213547;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -24,10 +24,10 @@ a:hover {
 
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background: var(--bg, #ffffff);
+  color: #213547;
 }
 
 h1 {
@@ -65,4 +65,135 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+/* Layout for resource page */
+.ResourcePage {
+  display: flex;
+  gap: 28px;
+  padding: 28px;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.CategoryPanel {
+  width: 360px;
+}
+
+.CategoryHeader h2 {
+  margin: 0 0 8px 0;
+  color: #0b5f73;
+}
+
+.Crisis {
+  font-size: 0.9rem;
+  color: #3a3a3a;
+  margin-bottom: 12px;
+}
+
+.CrisisButton {
+  margin-left: 8px;
+  background: #0b6fa0;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 10px;
+  border: none;
+}
+
+.CategoryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.CategoryTile {
+  background: #cfeaf5;
+  border: 2px solid rgba(11,111,144,0.12);
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  font-weight: 600;
+  color: #064a5f;
+  cursor: pointer;
+}
+
+.CategoryTile.selected {
+  background: #e6f6fb;
+  border: 4px solid #0b6fa0;
+}
+
+.ResourcesPanel {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.ResourcesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.RightControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.AddResource {
+  background: #0b6fa0;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.ResourceList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 72vh;
+  overflow: auto;
+  padding-right: 8px;
+}
+
+.ResourceCard {
+  border: 3px solid #0b6fa0;
+  padding: 12px 16px;
+  background: #ffffff;
+  color: #112;
+  text-align: left;
+}
+
+.ResourceTitle {
+  display: block;
+  font-weight: 700;
+  color: #064a5f;
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.ResourceDescription {
+  margin: 8px 0;
+  color: #333;
+}
+
+.ResourcePhone {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.ResourceCategories {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #2b6b7a;
+}
+
+@media (prefers-color-scheme: light) {
+  .CategoryTile { background: #dff2fb; }
+  .ResourceCard { background: #fff; }
 }

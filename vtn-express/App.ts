@@ -1,4 +1,5 @@
 import {requireAdmin} from "./api/middleware";
+import cors from "cors";
 
 const express = require("express");
 import resourcesHandler from "./api/resources";
@@ -6,6 +7,8 @@ import authHandler from "./api/auth";
 import adminHandler from "./api/admin";
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 
 // Mount handlers
