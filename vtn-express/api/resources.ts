@@ -8,7 +8,7 @@ export default async function handler(req: any, res: any) {
 
   try {
     if (req.method === "GET") {
-      const resources = await collection.find({}).toArray();
+      const resources = await collection.find({ pending: false }).toArray();
       return res.status(200).json(resources);
     }
 
