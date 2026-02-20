@@ -78,8 +78,8 @@ button:focus-visible {
 }
 
 .CategoryPanel {
-  flex: 1 1 50%;
-  max-width: 50%;
+  flex: 1 1 40%;
+  max-width: 40%;
   display: flex;
   flex-direction: column;
   align-self: flex-start;
@@ -159,8 +159,8 @@ button:focus-visible {
 }
 
 .ResourcesPanel {
-  flex: 1 1 50%;
-  max-width: 50%;
+  flex: 1 1 60%;
+  max-width: 60%;
   display: flex;
   flex-direction: column;
   height: calc(100vh - 96px); /* fixed viewport height so inner list can scroll */
@@ -512,4 +512,52 @@ input, textarea, select { background: #ffffff; color: #112; }
 .AdminDeclineBtn:hover {
   background: #a93226;
   transform: scale(1.08);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  #root {
+    padding: 0.5rem;
+  }
+
+  .ResourcePage {
+    padding: 12px 8px;
+    gap: 12px;
+  }
+
+  .CategoryPanel {
+    flex: 1 1 35%;
+    max-width: 35%;
+    height: calc(100vh - 40px);
+  }
+
+  .ResourcesPanel {
+    flex: 1 1 65%;
+    max-width: 65%;
+    height: calc(100vh - 40px);
+    padding: 8px;
+  }
+
+  .ResourcesHeaderRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .ResourcesHeaderRow > div:last-child {
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+
+  .CategoryGrid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 140px));
+  }
+
+  .CategoryTile {
+    max-width: 140px;
+    max-height: 140px;
+    font-size: 0.85rem;
+  }
 }
