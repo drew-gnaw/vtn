@@ -1,17 +1,13 @@
 import React from 'react';
 
 type Props = {
-  category: string;
+  // Header currently only renders the Add Resource button
 }
 
-export default function Header({ category }: Props) {
+export default function Header(_: Props) {
   return (
-    <div className="ResourcesHeader">
-      <h2>Resources</h2>
-      <div className="RightControls">
-        <div className="CategoryLabel">Category: <strong>{category}</strong></div>
-        <button className="AddResource">Add Resource</button>
-      </div>
+    <div className="HeaderOnly">
+      <button className="AddResource">Add Resource</button>
     </div>
   )
 }

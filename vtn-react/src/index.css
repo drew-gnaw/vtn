@@ -71,13 +71,16 @@ button:focus-visible {
 .ResourcePage {
   display: flex;
   gap: 28px;
-  padding: 28px;
+  padding: 48px 28px; /* increased vertical padding */
   box-sizing: border-box;
   width: 100%;
+  align-items: flex-start;
 }
 
 .CategoryPanel {
   width: 360px;
+  align-self: flex-start;
+  padding-top: 8px; /* small spacing from top */
 }
 
 .CategoryHeader h2 {
@@ -89,6 +92,16 @@ button:focus-visible {
   font-size: 0.9rem;
   color: #3a3a3a;
   margin-bottom: 12px;
+}
+
+/* Ensure headers and crisis text are left-aligned */
+.CategoryHeader,
+.CategoryHeader h2,
+.Crisis,
+.ResourcesTop,
+.ResourcesTitle,
+.CategoryIndicator {
+  text-align: left;
 }
 
 .CrisisButton {
@@ -129,6 +142,11 @@ button:focus-visible {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
+  min-height: calc(100vh - 96px); /* full viewport height minus vertical padding */
+  background: #ffffff; /* ensure white background */
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 2px;
 }
 
 .ResourcesHeader {
@@ -136,6 +154,33 @@ button:focus-visible {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+}
+
+.ResourcesHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ResourcesTop {
+  display: flex;
+  flex-direction: column;
+}
+
+.ResourcesTitle {
+  margin: 0 0 8px 0;
+}
+
+.CategoryIndicator {
+  font-size: 0.95rem;
+  color: #3a3a3a;
+}
+
+.HeaderOnly {
+  display: flex;
+  align-items: flex-start;
 }
 
 .RightControls {
@@ -156,9 +201,10 @@ button:focus-visible {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 72vh;
+  flex: 1 1 auto;
   overflow: auto;
-  padding-right: 8px;
+  padding: 12px;
+  background: #ffffff;
 }
 
 .ResourceCard {

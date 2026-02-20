@@ -52,9 +52,16 @@ export default function ResourceList() {
             <CategoryList categories={uniqueCategories} selected={filter} onSelect={handleFilter} />
 
             <div className="ResourcesPanel">
-                <Header category={filter} />
+                <div className="ResourcesHeaderRow">
+                    <div className="ResourcesTop">
+                        <h2 className="ResourcesTitle">Resources</h2>
+                        <div className="CategoryIndicator">Category: <strong>{filter}</strong></div>
+                    </div>
+                    <Header />
+                </div>
 
                 <div className="ResourceList">
+
                     {filteredResources.map((resource, index) => (
                         <div key={index} className="ResourceCard">
                             <div className="ResourceTitle">{resource.title}</div>
