@@ -202,7 +202,7 @@ export default function ResourceList() {
             style={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "flex-start",
+              alignItems: "flex-end",
               gap: 8,
             }}
           >
