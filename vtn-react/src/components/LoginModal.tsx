@@ -54,7 +54,7 @@ export default function LoginModal({ visible, onClose }: Props) {
         throw new Error('No token returned')
       }
     } catch (err: any) {
-      setMessage(err?.message || 'Login failed')
+      setMessage(err?.message.error || 'Login failed')
       if (timerRef.current) window.clearTimeout(timerRef.current)
       timerRef.current = window.setTimeout(() => setMessage(null), 2600)
     } finally {

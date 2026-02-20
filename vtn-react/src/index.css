@@ -135,6 +135,8 @@ button:focus-visible {
   border: 3px solid rgba(11,111,144,0.12);
   box-sizing: border-box;
   width: 100%;
+  max-width: 188px;
+  max-height: 188px;
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
@@ -409,4 +411,105 @@ input, textarea, select { background: #ffffff; color: #112; }
 @media (prefers-color-scheme: light) {
   .CategoryTile { background: #dff2fb; }
   .ResourceCard { background: #fff; }
+}
+
+/* Admin view segmented toggle */
+.AdminViewSwitch {
+  display: inline-flex;
+  align-items: center;
+  background: #e4f0f6;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 0;
+}
+
+.AdminViewOption {
+  background: transparent;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #064a5f;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.AdminViewOption:hover {
+  background: rgba(11, 111, 144, 0.08);
+}
+
+.AdminViewOptionActive {
+  background: #0b6fa0;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(11, 111, 144, 0.18);
+}
+
+.AdminViewOptionActive:hover {
+  background: #0b6fa0;
+}
+
+.AdminLogoutBtn {
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  margin-left: 2px;
+  font-size: 0.85rem;
+  color: #888;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.AdminLogoutBtn:hover {
+  color: #c0392b;
+  background: rgba(192, 57, 43, 0.08);
+}
+
+.EmptyPendingMessage {
+  text-align: center;
+  color: #999;
+  font-size: 1rem;
+  padding: 48px 0;
+}
+
+.AdminActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.AdminActionBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, transform 0.08s ease;
+}
+
+.AdminApproveBtn {
+  background: #27ae60;
+  color: #fff;
+}
+
+.AdminApproveBtn:hover {
+  background: #219a52;
+  transform: scale(1.08);
+}
+
+.AdminDeclineBtn {
+  background: #c0392b;
+  color: #fff;
+}
+
+.AdminDeclineBtn:hover {
+  background: #a93226;
+  transform: scale(1.08);
 }
