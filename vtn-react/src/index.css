@@ -78,9 +78,15 @@ button:focus-visible {
 }
 
 .CategoryPanel {
-  width: 360px;
+  flex: 1 1 50%;
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
   align-self: flex-start;
   padding-top: 8px; /* small spacing from top */
+  height: calc(100vh - 96px);
+  box-sizing: border-box;
+  overflow: hidden; /* allow inner grid to scroll */
 }
 
 .CategoryHeader h2 {
@@ -115,38 +121,52 @@ button:focus-visible {
 
 .CategoryGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  grid-auto-rows: 1fr;
   gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0; /* allow grid to shrink inside flex container */
+  overflow: auto; /* make categories scrollable when needed */
+  padding-right: 6px;
 }
 
 .CategoryTile {
   background: #cfeaf5;
-  border: 2px solid rgba(11,111,144,0.12);
-  height: 80px;
+  border: 3px solid rgba(11,111,144,0.12);
+  box-sizing: border-box;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
   padding: 8px;
   font-weight: 600;
+  font-size: 1rem;
   color: #064a5f;
   cursor: pointer;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.08s ease;
 }
 
 .CategoryTile.selected {
   background: #e6f6fb;
-  border: 4px solid #0b6fa0;
+  /* keep same border width to avoid shifting layout; change color instead */
+  border-color: #0b6fa0;
+  box-shadow: 0 0 0 4px rgba(11,111,144,0.06);
+  transform: translateY(-1px);
 }
 
 .ResourcesPanel {
-  flex: 1 1 auto;
+  flex: 1 1 50%;
+  max-width: 50%;
   display: flex;
   flex-direction: column;
-  min-height: calc(100vh - 96px); /* full viewport height minus vertical padding */
-  background: #ffffff; /* ensure white background */
+  height: calc(100vh - 96px); /* fixed viewport height so inner list can scroll */
+  background: #ffffff;
   box-sizing: border-box;
   padding: 12px;
   border-radius: 2px;
+  overflow: hidden; /* prevent double scrollbars */
 }
 
 .ResourcesHeader {
@@ -202,9 +222,11 @@ button:focus-visible {
   flex-direction: column;
   gap: 12px;
   flex: 1 1 auto;
+  min-height: 0; /* allow flex child to shrink and enable scrolling */
   overflow: auto;
-  padding: 12px;
+  padding: 12px 12px 12px 0;
   background: #ffffff;
+  -webkit-overflow-scrolling: touch;
 }
 
 .ResourceCard {
@@ -213,6 +235,32 @@ button:focus-visible {
   background: #ffffff;
   color: #112;
   text-align: left;
+}
+
+/* Clickable card wrapper (opens link when clicked) */
+.ResourceCardClickable {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: background-color 0.12s ease, box-shadow 0.12s ease, transform 0.08s ease;
+}
+.ResourceCardClickable:hover {
+  background-color: #f3fbfe; /* slight darken/tint */
+  box-shadow: 0 6px 18px rgba(11,111,144,0.06);
+  transform: translateY(-2px);
+}
+
+.ResourceLink {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  color: #064a5f;
+  text-decoration: underline;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .ResourceTitle {
@@ -231,6 +279,43 @@ button:focus-visible {
 .ResourcePhone {
   font-weight: 600;
   color: #1a1a1a;
+}
+
+.ResourcePhoneLink {
+  color: #064a5f;
+  text-decoration: underline;
+}
+
+.ResourcePhoneCopy {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: #064a5f;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.CopiedBadge {
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: #0b6fa0;
+  font-weight: 600;
+}
+
+/* Top-center toast for copied actions */
+.CopiedToast {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0b6fa0;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(11,111,144,0.15);
+  z-index: 9999;
+  font-weight: 600;
 }
 
 .ResourceCategories {

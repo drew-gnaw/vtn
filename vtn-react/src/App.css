@@ -42,8 +42,8 @@
 }
 
 .ResourceList {
-  background-color: #002145;
-  height: 400px;
+  background-color: #ffffff;
+  height: auto;
   overflow-y: auto;
 }
 
