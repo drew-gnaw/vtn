@@ -4,8 +4,8 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: #213547;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -22,12 +22,16 @@ a:hover {
   color: #535bf2;
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
 body {
   margin: 0;
-  display: flex;
-  place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  background: var(--bg, #ffffff);
+  color: #213547;
 }
 
 h1 {
@@ -64,5 +68,502 @@ button:focus-visible {
   }
   button {
     background-color: #f9f9f9;
+  }
+}
+
+/* Layout for resource page */
+.ResourcePage {
+  display: flex;
+  gap: 28px;
+  padding: 48px 28px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  align-items: stretch;
+}
+
+.CategoryPanel {
+  flex: 1 1 40%;
+  max-width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  padding-top: 8px; /* small spacing from top */
+  height: calc(100vh - 96px);
+  box-sizing: border-box;
+  overflow: hidden; /* allow inner grid to scroll */
+}
+
+.CategoryHeader h2 {
+  margin: 0 0 8px 0;
+  color: #0b5f73;
+}
+
+.Crisis {
+  font-size: 0.9rem;
+  color: #3a3a3a;
+  margin-bottom: 12px;
+}
+
+/* Ensure headers and crisis text are left-aligned */
+.CategoryHeader,
+.CategoryHeader h2,
+.Crisis,
+.ResourcesTop,
+.ResourcesTitle,
+.CategoryIndicator {
+  text-align: left;
+}
+
+.CrisisButton {
+  margin-left: 8px;
+  background: #0b6fa0;
+  color: white;
+  border-radius: 6px;
+  padding: 6px 10px;
+  border: none;
+}
+
+.CategoryGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 140px);
+  grid-auto-rows: auto;
+  justify-content: start;
+  align-content: start;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0; /* allow grid to shrink inside flex container */
+  overflow: auto; /* make categories scrollable when needed */
+  padding-right: 6px;
+}
+
+.CategoryTile {
+  background: #cfeaf5;
+  border: 3px solid rgba(11,111,144,0.12);
+  box-sizing: border-box;
+  width: 140px;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #064a5f;
+  cursor: pointer;
+  transition: border-color 0.12s ease, box-shadow 0.12s ease, transform 0.08s ease;
+}
+
+.CategoryTile.selected {
+  background: #e6f6fb;
+  /* keep same border width to avoid shifting layout; change color instead */
+  border-color: #0b6fa0;
+  box-shadow: 0 0 0 4px rgba(11,111,144,0.06);
+  transform: translateY(-1px);
+}
+
+.ResourcesPanel {
+  flex: 1 1 60%;
+  max-width: 60%;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 96px); /* fixed viewport height so inner list can scroll */
+  background: #ffffff;
+  box-sizing: border-box;
+  padding: 12px;
+  border-radius: 2px;
+  overflow: hidden; /* prevent double scrollbars */
+}
+
+.ResourcesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ResourcesHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.ResourcesTop {
+  display: flex;
+  flex-direction: column;
+}
+
+.ResourcesTitle {
+  margin: 0 0 8px 0;
+}
+
+.CategoryIndicator {
+  font-size: 0.95rem;
+  color: #3a3a3a;
+}
+
+.HeaderOnly {
+  display: flex;
+  align-items: flex-start;
+}
+
+.RightControls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.AddResource {
+  background: #0b6fa0;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+}
+
+.ModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+.ModalContent {
+  background: #ffffff;
+  width: min(900px, 98%);
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 8px;
+  padding: 0 18px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+}
+.ModalContent { position: relative; text-align: left; }
+.ModalContent h2 { text-align: left; }
+.ModalContent label { text-align: left; }
+.ModalContent .FormRow { text-align: left; }
+.ModalContent .FormRow label { text-align: left; }
+.ModalContent input, .ModalContent textarea, .ModalContent select { text-align: left; }
+.ModalContent .MultiCategoryList { text-align: left; }
+.ModalContent .CategoryCheckbox span { text-align: left; }
+.ModalTitle { font-size: 1.5rem; font-weight: 600; padding-top: 16px; padding-bottom: 4px; }
+.ModalSubtitle { font-size: 0.85rem; font-weight: 600; padding: 4px 0;  }
+.ModalClose {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 16px;
+}
+.ModalClose { color: #112; }
+.ModalClose svg { display: block; }
+.FormRow { margin-bottom: 12px; }
+.FormRow label { display: block; font-weight: 600; margin-bottom: 6px; color:#0b6fa0 }
+.FormRow input, .FormRow textarea { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #9fc6d6; border-radius: 4px; background: #ffffff; color: #112; }
+.FormRow input::placeholder, .FormRow textarea::placeholder { color: #7f9aa3; }
+
+/* Ensure other plain inputs/selects/textareas use white background and dark text */
+input, textarea, select { background: #ffffff; color: #112; }
+.FormRow textarea { min-height: 120px; resize: vertical; }
+.MultiCategoryList { display:flex; flex-wrap:wrap; gap:8px; }
+.CategoryCheckbox { display:flex; align-items:center; gap:8px; background:#f3fbfe; padding:8px 12px; border-radius:6px; border:1px solid rgba(11,111,144,0.08); justify-content:flex-start; min-width:110px; }
+.CategoryCheckbox span { display:block; text-align:left; }
+.CategoryCheckbox input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border: 1px solid #c8dfe6;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+.CategoryCheckbox input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  top: 1px;
+  left: 4px;
+  display: none;
+}
+.CategoryCheckbox input[type="checkbox"]:checked {
+  background: #0b6fa0;
+  border-color: #0b6fa0;
+}
+.CategoryCheckbox input[type="checkbox"]:checked::after { display: block; }
+.AddCategoryInput { padding:8px; border-radius:4px; border:1px solid #9fc6d6; }
+
+.ResourceList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 auto;
+  min-height: 0; /* allow flex child to shrink and enable scrolling */
+  overflow: auto;
+  padding: 12px 12px 12px 0;
+  background: #ffffff;
+  -webkit-overflow-scrolling: touch;
+}
+
+.ResourceCard {
+  border: 3px solid #0b6fa0;
+  padding: 12px 16px;
+  background: #ffffff;
+  color: #112;
+  text-align: left;
+}
+
+/* Clickable card wrapper (opens link when clicked) */
+.ResourceCardClickable {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  transition: background-color 0.12s ease, box-shadow 0.12s ease, transform 0.08s ease;
+}
+.ResourceCardClickable:hover {
+  background-color: #f3fbfe; /* slight darken/tint */
+  box-shadow: 0 6px 18px rgba(11,111,144,0.06);
+  transform: translateY(-2px);
+}
+
+.ResourceLink {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  color: #064a5f;
+  text-decoration: underline;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ResourceTitle {
+  display: block;
+  font-weight: 700;
+  color: #064a5f;
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.ResourceDescription {
+  margin: 8px 0;
+  color: #333;
+}
+
+.ResourcePhone {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.ResourcePhoneLink {
+  color: #064a5f;
+  text-decoration: underline;
+}
+
+.ResourcePhoneCopy {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: #064a5f;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.CopiedBadge {
+  margin-left: 8px;
+  font-size: 0.85rem;
+  color: #0b6fa0;
+  font-weight: 600;
+}
+
+/* Top-center toast for copied actions */
+.CopiedToast {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0b6fa0;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  box-shadow: 0 6px 20px rgba(11,111,144,0.15);
+  z-index: 11000;
+  font-weight: 600;
+}
+
+.ResourceCategories {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: #2b6b7a;
+}
+
+@media (prefers-color-scheme: light) {
+  .CategoryTile { background: #dff2fb; }
+  .ResourceCard { background: #fff; }
+}
+
+/* Admin view segmented toggle */
+.AdminViewSwitch {
+  display: inline-flex;
+  align-items: center;
+  background: #e4f0f6;
+  border-radius: 8px;
+  padding: 3px;
+  gap: 0;
+}
+
+.AdminViewOption {
+  background: transparent;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #064a5f;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.AdminViewOption:hover {
+  background: rgba(11, 111, 144, 0.08);
+}
+
+.AdminViewOptionActive {
+  background: #0b6fa0;
+  color: #ffffff;
+  box-shadow: 0 1px 4px rgba(11, 111, 144, 0.18);
+}
+
+.AdminViewOptionActive:hover {
+  background: #0b6fa0;
+}
+
+.AdminLogoutBtn {
+  background: transparent;
+  border: none;
+  padding: 4px 8px;
+  margin-left: 2px;
+  font-size: 0.85rem;
+  color: #888;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.AdminLogoutBtn:hover {
+  color: #c0392b;
+  background: rgba(192, 57, 43, 0.08);
+}
+
+.EmptyPendingMessage {
+  text-align: center;
+  color: #999;
+  font-size: 1rem;
+  padding: 48px 0;
+}
+
+.AdminActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  justify-content: flex-end;
+}
+
+.AdminActionBtn {
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  border: none;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, transform 0.08s ease;
+}
+
+.AdminApproveBtn {
+  background: #27ae60;
+  color: #fff;
+}
+
+.AdminApproveBtn:hover {
+  background: #219a52;
+  transform: scale(1.08);
+}
+
+.AdminDeclineBtn {
+  background: #c0392b;
+  color: #fff;
+}
+
+.AdminDeclineBtn:hover {
+  background: #a93226;
+  transform: scale(1.08);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  #root {
+    padding: 0.5rem;
+  }
+
+  .ResourcePage {
+    padding: 12px 8px;
+    gap: 12px;
+  }
+
+  .CategoryPanel {
+    flex: 1 1 35%;
+    max-width: 35%;
+    height: calc(100vh - 40px);
+  }
+
+  .ResourcesPanel {
+    flex: 1 1 65%;
+    max-width: 65%;
+    height: calc(100vh - 40px);
+    padding: 8px;
+  }
+
+  .ResourcesHeaderRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .ResourcesHeaderRow > div:last-child {
+    flex-direction: row !important;
+    align-items: center !important;
+    flex-wrap: wrap;
+    gap: 8px !important;
+  }
+
+  .CategoryGrid {
+    grid-template-columns: repeat(auto-fill, 100px);
+  }
+
+  .CategoryTile {
+    width: 100px;
+    height: 100px;
+    font-size: 0.85rem;
   }
 }
