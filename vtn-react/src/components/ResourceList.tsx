@@ -143,7 +143,7 @@ export default function ResourceList() {
         const data = await res.json().catch(() => null);
         throw new Error(data?.error || res.statusText);
       }
-      // Remove the resource from the pending list on success
+      
       setPendingResources((prev) => prev.filter((r) => r.id !== resourceId));
       window.dispatchEvent(
         new CustomEvent("vtn:copied", {
@@ -213,13 +213,13 @@ export default function ResourceList() {
               <div className="AdminViewSwitch">
                 <button
                   className={`AdminViewOption${adminView === "user" ? " AdminViewOptionActive" : ""}`}
-                  onClick={() => setAdminView("user")}
+                  onClick={() => { setAdminView("user"); setFilter("All"); }}
                 >
                   User View
                 </button>
                 <button
                   className={`AdminViewOption${adminView === "admin" ? " AdminViewOptionActive" : ""}`}
-                  onClick={() => setAdminView("admin")}
+                  onClick={() => { setAdminView("admin"); setFilter("All"); }}
                 >
                   Admin Panel
                 </button>
