@@ -217,6 +217,88 @@ button:focus-visible {
   border-radius: 6px;
 }
 
+.ModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+.ModalContent {
+  background: #ffffff;
+  width: min(900px, 98%);
+  max-height: 90vh;
+  overflow: auto;
+  border-radius: 8px;
+  padding: 0 18px;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.18);
+}
+.ModalContent { position: relative; text-align: left; }
+.ModalContent h2 { text-align: left; }
+.ModalContent label { text-align: left; }
+.ModalContent .FormRow { text-align: left; }
+.ModalContent .FormRow label { text-align: left; }
+.ModalContent input, .ModalContent textarea, .ModalContent select { text-align: left; }
+.ModalContent .MultiCategoryList { text-align: left; }
+.ModalContent .CategoryCheckbox span { text-align: left; }
+.ModalTitle { font-size: 1.5rem; font-weight: 600; padding-top: 16px; padding-bottom: 4px; }
+.ModalSubtitle { font-size: 0.85rem; font-weight: 600; padding: 4px 0;  }
+.ModalClose {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 16px;
+}
+.ModalClose { color: #112; }
+.ModalClose svg { display: block; }
+.FormRow { margin-bottom: 12px; }
+.FormRow label { display: block; font-weight: 600; margin-bottom: 6px; color:#0b6fa0 }
+.FormRow input, .FormRow textarea { width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid #9fc6d6; border-radius: 4px; background: #ffffff; color: #112; }
+.FormRow input::placeholder, .FormRow textarea::placeholder { color: #7f9aa3; }
+
+/* Ensure other plain inputs/selects/textareas use white background and dark text */
+input, textarea, select { background: #ffffff; color: #112; }
+.FormRow textarea { min-height: 120px; resize: vertical; }
+.MultiCategoryList { display:flex; flex-wrap:wrap; gap:8px; }
+.CategoryCheckbox { display:flex; align-items:center; gap:8px; background:#f3fbfe; padding:8px 12px; border-radius:6px; border:1px solid rgba(11,111,144,0.08); justify-content:flex-start; min-width:110px; }
+.CategoryCheckbox span { display:block; text-align:left; }
+.CategoryCheckbox input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  background: #ffffff;
+  border: 1px solid #c8dfe6;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+.CategoryCheckbox input[type="checkbox"]::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  top: 1px;
+  left: 4px;
+  display: none;
+}
+.CategoryCheckbox input[type="checkbox"]:checked {
+  background: #0b6fa0;
+  border-color: #0b6fa0;
+}
+.CategoryCheckbox input[type="checkbox"]:checked::after { display: block; }
+.AddCategoryInput { padding:8px; border-radius:4px; border:1px solid #9fc6d6; }
+
 .ResourceList {
   display: flex;
   flex-direction: column;
@@ -314,7 +396,7 @@ button:focus-visible {
   padding: 8px 14px;
   border-radius: 6px;
   box-shadow: 0 6px 20px rgba(11,111,144,0.15);
-  z-index: 9999;
+  z-index: 11000;
   font-weight: 600;
 }
 

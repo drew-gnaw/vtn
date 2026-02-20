@@ -4,13 +4,16 @@ import '../App.css';
 import '../index.css';
 import BACKEND_URL from '../lib/backend';
 import CategoryList from './CategoryList';
-import Header from './Header';
+import AddResourceModal from './AddResourceModal';
+import LoginModal from './LoginModal';
 
 export default function ResourceList() {
     // Initialize States
     const [resources, setResources] = useState<Resource[]>([])
     const [filter, setFilter] = useState<string>('All')
     const [isMobile, setIsMobile] = useState<boolean>(false)
+    const [showAdd, setShowAdd] = useState<boolean>(false)
+    const [showLogin, setShowLogin] = useState<boolean>(false)
 
     // Fetch resources from backend on mount
     useEffect(() => {
@@ -90,7 +93,10 @@ export default function ResourceList() {
                         <h2 className="ResourcesTitle">Resources</h2>
                         <div className="CategoryIndicator">Category: <strong>{filter}</strong></div>
                     </div>
-                    <Header />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <button className="AddResource" onClick={() => setShowAdd(true)}>Add Resource</button>
+                      <button className="AddResource" onClick={() => setShowLogin(true)}>Admin Login</button>
+                    </div>
                 </div>
 
                 <div className="ResourceList">
@@ -150,9 +156,13 @@ export default function ResourceList() {
                     })}
                 </div>
             </div>
+            <AddResourceModal visible={showAdd} onClose={() => setShowAdd(false)} initialCategories={uniqueCategories} />
+            <LoginModal visible={showLogin} onClose={() => setShowLogin(false)} />
         </div>
     );
 }
+
+// local state inserted near top of file
 
 function formatTel(phone?: string) {
     if (!phone) return '';
