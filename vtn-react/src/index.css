@@ -206,6 +206,58 @@ button:focus-visible {
   color: #3a3a3a;
 }
 
+.ResourceSearchBar {
+  margin: 8px 0 12px 0;
+}
+
+.ResourceSearchControls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ResourceSearchControls > * {
+  min-width: 0;
+}
+
+.ResourceSearchInput {
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #9fc6d6;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #112;
+  font: inherit;
+}
+
+.ResourceSearchInput::placeholder {
+  color: #7f9aa3;
+}
+
+.ResourceSearchInput:focus {
+  outline: none;
+  border-color: #0b6fa0;
+  box-shadow: 0 0 0 3px rgba(11, 111, 160, 0.12);
+}
+
+.ResourceSortSelect {
+  flex: 0 0 180px;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #9fc6d6;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #112;
+  font: inherit;
+}
+
+.ResourceSortSelect:focus {
+  outline: none;
+  border-color: #0b6fa0;
+  box-shadow: 0 0 0 3px rgba(11, 111, 160, 0.12);
+}
+
 .HeaderOnly {
   display: flex;
   align-items: flex-start;
@@ -548,6 +600,20 @@ input, textarea, select { background: #ffffff; color: #112; }
     flex-direction: column;
     align-items: stretch;
     gap: 8px;
+  }
+
+  .ResourceSearchBar {
+    margin-top: 6px;
+  }
+
+  .ResourceSearchControls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ResourceSortSelect {
+    flex-basis: auto;
+    width: 100%;
   }
 
   .ResourcesHeaderRow > div:last-child {
