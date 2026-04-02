@@ -5,7 +5,7 @@
 const env = (import.meta as any).env ?? {};
 
 const FALLBACK_DEV = 'http://localhost:4321';
-const FALLBACK_PROD = 'https://vtn-express.vercel.app';
+const FALLBACK_PROD = 'https://vtn-server.vercel.app';
 
 const BACKEND_URL = (() => {
   // env.VITE_API_BASE takes highest precedence
