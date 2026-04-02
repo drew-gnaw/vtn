@@ -11,6 +11,8 @@ export default function ResourceList() {
   // Initialize States
   const [resources, setResources] = useState<Resource[]>([]);
   const [filter, setFilter] = useState<string>("All");
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sortBy, setSortBy] = useState<"alphabetical" | "entry">("entry");
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [showAdd, setShowAdd] = useState<boolean>(false);
   const [showLogin, setShowLogin] = useState<boolean>(false);
@@ -172,10 +174,39 @@ export default function ResourceList() {
   ];
 
   // Filter resources based on selected category
-  const filteredResources =
+  const categoryFilteredResources =
     filter === "All"
       ? activeResources
       : activeResources.filter((resource) => resource.categories.includes(filter));
+
+  const searchFilteredResources = searchQuery.trim().toLowerCase();
+  const filteredResources = searchFilteredResources
+    ? categoryFilteredResources.filter((resource) => {
+        const haystack = [
+          resource.title,
+          resource.description,
+          resource.link,
+          resource.phone,
+          resource.categories.join(" "),
+        ]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase();
+
+        return haystack.includes(searchFilteredResources);
+      })
+    : categoryFilteredResources;
+
+  const sortedResources = [...filteredResources].sort((a, b) => {
+    if (sortBy === "alphabetical") {
+      return a.title.localeCompare(b.title, undefined, {
+        sensitivity: "base",
+        numeric: true,
+      });
+    }
+
+    return activeResources.indexOf(a) - activeResources.indexOf(b);
+  });
 
   // Set filter depends on tile selected
   const handleFilter = (category: string) => {
@@ -240,11 +271,42 @@ export default function ResourceList() {
           </div>
         </div>
 
+        <div className="ResourceSearchBar">
+          <div className="ResourceSearchControls">
+            <input
+              className="ResourceSearchInput"
+              type="search"
+              placeholder="Search resources"
+              aria-label="Search resources"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+
+            <select
+              className="ResourceSortSelect"
+              aria-label="Sort resources"
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as "alphabetical" | "entry")}
+            >
+              <option value="alphabetical">Alphabetical</option>
+              <option value="entry">Date of entry</option>
+            </select>
+          </div>
+        </div>
+
         <div className="ResourceList">
-          {adminView === "admin" && filteredResources.length === 0 && (
-            <div className="EmptyPendingMessage">No pending resources</div>
+          {sortedResources.length === 0 && (
+            <div className="EmptyPendingMessage">
+              {adminView === "admin"
+                ? searchFilteredResources
+                  ? "No pending resources match your search"
+                  : "No pending resources"
+                : searchFilteredResources
+                  ? "No resources match your search"
+                  : "No resources available"}
+            </div>
           )}
-          {filteredResources.map((resource, index) => {
+          {sortedResources.map((resource, index) => {
             const content = (
               <>
                 <div className="ResourceTitle">{resource.title}</div>
@@ -265,7 +327,6 @@ export default function ResourceList() {
                         className="ResourcePhoneCopy"
                         onClick={(e: any) => {
                           e.stopPropagation();
-                          e.preventDefault();
                           copyToClipboard(formatTel(resource.phone));
                         }}
                         onKeyDown={(e: any) => {
