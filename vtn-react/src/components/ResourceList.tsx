@@ -19,6 +19,8 @@ export default function ResourceList() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [adminView, setAdminView] = useState<"user" | "admin">("user");
   const [pendingResources, setPendingResources] = useState<Resource[]>([]);
+  const [isResourcesLoading, setIsResourcesLoading] = useState<boolean>(true);
+  const [isPendingLoading, setIsPendingLoading] = useState<boolean>(false);
 
   // Check admin login status on mount
   useEffect(() => {
@@ -52,6 +54,7 @@ export default function ResourceList() {
     if (adminView !== "admin") return;
     let token = "";
     try { token = localStorage.getItem("vtn:adminToken") || ""; } catch {}
+    setIsPendingLoading(true);
     fetch(BACKEND_URL + "/api/admin/resources", {
       headers: { Authorization: `Bearer ${token}` },
     })
@@ -70,11 +73,13 @@ export default function ResourceList() {
         }));
         setPendingResources(mapped);
       })
-      .catch((err) => console.error("Failed to fetch pending resources", err));
+      .catch((err) => console.error("Failed to fetch pending resources", err))
+      .finally(() => setIsPendingLoading(false));
   }, [adminView]);
 
   // Fetch resources from backend on mount
   useEffect(() => {
+    setIsResourcesLoading(true);
     fetch(BACKEND_URL + "/api/resources")
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText);
@@ -91,7 +96,8 @@ export default function ResourceList() {
         }));
         setResources(mapped);
       })
-      .catch((err) => console.error("Failed to fetch resources", err));
+      .catch((err) => console.error("Failed to fetch resources", err))
+      .finally(() => setIsResourcesLoading(false));
   }, []);
 
   useEffect(() => {
@@ -208,6 +214,8 @@ export default function ResourceList() {
     return activeResources.indexOf(a) - activeResources.indexOf(b);
   });
 
+  const isLoadingActive = adminView === "admin" ? isPendingLoading : isResourcesLoading;
+
   // Set filter depends on tile selected
   const handleFilter = (category: string) => {
     setFilter(category);
@@ -295,18 +303,25 @@ export default function ResourceList() {
         </div>
 
         <div className="ResourceList">
-          {sortedResources.length === 0 && (
-            <div className="EmptyPendingMessage">
-              {adminView === "admin"
-                ? searchFilteredResources
-                  ? "No pending resources match your search"
-                  : "No pending resources"
-                : searchFilteredResources
-                  ? "No resources match your search"
-                  : "No resources available"}
+          {isLoadingActive ? (
+            <div className="ResourceLoading" role="status" aria-live="polite" aria-label="Loading resources">
+              <div className="ResourceSpinner" aria-hidden="true" />
+              <div className="ResourceLoadingText">Loading resources...</div>
             </div>
-          )}
-          {sortedResources.map((resource, index) => {
+          ) : (
+            <>
+              {sortedResources.length === 0 && (
+                <div className="EmptyPendingMessage">
+                  {adminView === "admin"
+                    ? searchFilteredResources
+                      ? "No pending resources match your search"
+                      : "No pending resources"
+                    : searchFilteredResources
+                      ? "No resources match your search"
+                      : "No resources available"}
+                </div>
+              )}
+              {sortedResources.map((resource, index) => {
             const content = (
               <>
                 <div className="ResourceTitle">{resource.title}</div>
@@ -411,7 +426,9 @@ export default function ResourceList() {
                 {adminButtons}
               </div>
             );
-          })}
+              })}
+            </>
+          )}
         </div>
       </div>
       <AddResourceModal

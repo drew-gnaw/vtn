@@ -531,6 +531,36 @@ input, textarea, select { background: #ffffff; color: #112; }
   padding: 48px 0;
 }
 
+.ResourceLoading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 0;
+  color: #4a6a74;
+}
+
+.ResourceSpinner {
+  width: 36px;
+  height: 36px;
+  border-radius: 9999px;
+  border: 4px solid #d4e8f1;
+  border-top-color: #0b6fa0;
+  animation: resource-spin 0.9s linear infinite;
+}
+
+.ResourceLoadingText {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+@keyframes resource-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .AdminActions {
   display: flex;
   gap: 8px;
