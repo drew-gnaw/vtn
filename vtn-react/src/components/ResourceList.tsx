@@ -55,7 +55,7 @@ export default function ResourceList() {
     let token = "";
     try { token = localStorage.getItem("vtn:adminToken") || ""; } catch {}
     setIsPendingLoading(true);
-    fetch(BACKEND_URL + "/api/admin/resources", {
+    fetch(BACKEND_URL + "/api/admin", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -139,7 +139,7 @@ export default function ResourceList() {
     let token = "";
     try { token = localStorage.getItem("vtn:adminToken") || ""; } catch {}
     try {
-      const res = await fetch(BACKEND_URL + "/api/admin/resources", {
+      const res = await fetch(BACKEND_URL + "/api/admin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
