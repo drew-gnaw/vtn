@@ -122,22 +122,22 @@ export default function AddResourceModal({ visible, onClose, initialCategories }
         <form onSubmit={handleSubmit}>
           <div className="FormRow">
             <label>Title*</label>
-            <input value={title} onChange={e => setTitle(e.target.value)} />
+            <input value={title} onChange={e => setTitle(e.target.value)} placeholder='Name of the resource' />
           </div>
 
           <div className="FormRow">
             <label>Link</label>
-            <input value={link} onChange={e => setLink(e.target.value)} />
+            <input value={link} onChange={e => setLink(e.target.value)} placeholder='Link to the resource' />
           </div>
 
           <div className="FormRow">
             <label>Phone Number</label>
-            <input value={phone} onChange={e => setPhone(e.target.value)} />
+            <input value={phone} onChange={e => setPhone(e.target.value)} placeholder='Phone number of the resource' />
           </div>
 
           <div className="FormRow">
             <label>Description</label>
-            <textarea value={description} onChange={e => setDescription(e.target.value)} />
+            <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder='Describe the resource...' />
           </div>
 
           <div className="FormRow">
