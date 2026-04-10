@@ -34,7 +34,7 @@ export default function LoginModal({ visible, onClose }: Props) {
     }
     setSubmitting(true)
     try {
-      const res = await fetch(BACKEND_URL + '/api/auth/login', {
+      const res = await fetch(BACKEND_URL + '/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password })

@@ -5,6 +5,7 @@ import "../index.css";
 import BACKEND_URL from "../lib/backend";
 import CategoryList from "./CategoryList";
 import AddResourceModal from "./AddResourceModal";
+import EditResourceModal from "./EditResourceModal";
 import LoginModal from "./LoginModal";
 
 export default function ResourceList() {
@@ -19,6 +20,10 @@ export default function ResourceList() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [adminView, setAdminView] = useState<"user" | "admin">("user");
   const [pendingResources, setPendingResources] = useState<Resource[]>([]);
+  const [isResourcesLoading, setIsResourcesLoading] = useState<boolean>(true);
+  const [isPendingLoading, setIsPendingLoading] = useState<boolean>(false);
+  const [editingResource, setEditingResource] = useState<Resource | null>(null);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
   // Check admin login status on mount
   useEffect(() => {
@@ -52,7 +57,8 @@ export default function ResourceList() {
     if (adminView !== "admin") return;
     let token = "";
     try { token = localStorage.getItem("vtn:adminToken") || ""; } catch {}
-    fetch(BACKEND_URL + "/api/admin/resources", {
+    setIsPendingLoading(true);
+    fetch(BACKEND_URL + "/api/admin", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((res) => {
@@ -70,11 +76,13 @@ export default function ResourceList() {
         }));
         setPendingResources(mapped);
       })
-      .catch((err) => console.error("Failed to fetch pending resources", err));
+      .catch((err) => console.error("Failed to fetch pending resources", err))
+      .finally(() => setIsPendingLoading(false));
   }, [adminView]);
 
   // Fetch resources from backend on mount
   useEffect(() => {
+    setIsResourcesLoading(true);
     fetch(BACKEND_URL + "/api/resources")
       .then((res) => {
         if (!res.ok) throw new Error(res.statusText);
@@ -91,7 +99,8 @@ export default function ResourceList() {
         }));
         setResources(mapped);
       })
-      .catch((err) => console.error("Failed to fetch resources", err));
+      .catch((err) => console.error("Failed to fetch resources", err))
+      .finally(() => setIsResourcesLoading(false));
   }, []);
 
   useEffect(() => {
@@ -133,7 +142,7 @@ export default function ResourceList() {
     let token = "";
     try { token = localStorage.getItem("vtn:adminToken") || ""; } catch {}
     try {
-      const res = await fetch(BACKEND_URL + "/api/admin/resources", {
+      const res = await fetch(BACKEND_URL + "/api/admin", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -159,6 +168,56 @@ export default function ResourceList() {
           detail: err?.message || "Action failed",
         }),
       );
+    }
+  };
+
+  const handleEditResource = (resource: Resource) => {
+    if (adminView === "admin") {
+      setEditingResource(resource);
+      setShowEditModal(true);
+    }
+  };
+
+  const handleSaveEdit = async (resourceId: string, updates: Partial<Resource>) => {
+    let token = "";
+    try { token = localStorage.getItem("vtn:adminToken") || ""; } catch {}
+    try {
+      const res = await fetch(BACKEND_URL + "/api/admin", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: resourceId,
+          name: updates.title,
+          description: updates.description,
+          link: updates.link,
+          phone_number: updates.phone,
+          categories: updates.categories,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || res.statusText);
+      }
+      
+      setPendingResources((prev) =>
+        prev.map((r) =>
+          r.id === resourceId
+            ? {
+                ...r,
+                title: updates.title || r.title,
+                description: updates.description || r.description,
+                link: updates.link || r.link,
+                phone: updates.phone || r.phone,
+                categories: updates.categories || r.categories,
+              }
+            : r
+        )
+      );
+    } catch (err: any) {
+      throw new Error(err?.message || "Failed to save resource");
     }
   };
 
@@ -207,6 +266,8 @@ export default function ResourceList() {
 
     return activeResources.indexOf(a) - activeResources.indexOf(b);
   });
+
+  const isLoadingActive = adminView === "admin" ? isPendingLoading : isResourcesLoading;
 
   // Set filter depends on tile selected
   const handleFilter = (category: string) => {
@@ -295,18 +356,25 @@ export default function ResourceList() {
         </div>
 
         <div className="ResourceList">
-          {sortedResources.length === 0 && (
-            <div className="EmptyPendingMessage">
-              {adminView === "admin"
-                ? searchFilteredResources
-                  ? "No pending resources match your search"
-                  : "No pending resources"
-                : searchFilteredResources
-                  ? "No resources match your search"
-                  : "No resources available"}
+          {isLoadingActive ? (
+            <div className="ResourceLoading" role="status" aria-live="polite" aria-label="Loading resources">
+              <div className="ResourceSpinner" aria-hidden="true" />
+              <div className="ResourceLoadingText">Loading resources...</div>
             </div>
-          )}
-          {sortedResources.map((resource, index) => {
+          ) : (
+            <>
+              {sortedResources.length === 0 && (
+                <div className="EmptyPendingMessage">
+                  {adminView === "admin"
+                    ? searchFilteredResources
+                      ? "No pending resources match your search"
+                      : "No pending resources"
+                    : searchFilteredResources
+                      ? "No resources match your search"
+                      : "No resources available"}
+                </div>
+              )}
+              {sortedResources.map((resource, index) => {
             const content = (
               <>
                 <div className="ResourceTitle">{resource.title}</div>
@@ -354,6 +422,18 @@ export default function ResourceList() {
 
             const adminButtons = adminView === "admin" && resource.id && (
               <div className="AdminActions">
+                <button
+                  className="AdminActionBtn AdminEditBtn"
+                  title="Edit"
+                  aria-label="Edit resource"
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleEditResource(resource);
+                  }}
+                >
+                  ✎
+                </button>
                 <button
                   className="AdminActionBtn AdminApproveBtn"
                   title="Approve"
@@ -411,13 +491,22 @@ export default function ResourceList() {
                 {adminButtons}
               </div>
             );
-          })}
+              })}
+            </>
+          )}
         </div>
       </div>
       <AddResourceModal
         visible={showAdd}
         onClose={() => setShowAdd(false)}
         initialCategories={uniqueCategories}
+      />
+      <EditResourceModal
+        visible={showEditModal}
+        resource={editingResource}
+        onClose={() => { setShowEditModal(false); setEditingResource(null); }}
+        onSave={handleSaveEdit}
+        availableCategories={uniqueCategories}
       />
       <LoginModal visible={showLogin} onClose={handleLoginClose} />
     </div>

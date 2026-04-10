@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import BACKEND_URL from '../lib/backend'
+import { type Resource } from '../constants/interface'
 
 function CloseIcon({ size = 20 }: { size?: number }) {
   return (
@@ -20,11 +20,13 @@ function CloseIcon({ size = 20 }: { size?: number }) {
 
 type Props = {
   visible: boolean
+  resource: Resource | null
   onClose: () => void
-  initialCategories: string[]
+  onSave: (resourceId: string, updates: Partial<Resource>) => Promise<void>
+  availableCategories: string[]
 }
 
-export default function AddResourceModal({ visible, onClose, initialCategories }: Props) {
+export default function EditResourceModal({ visible, resource, onClose, onSave, availableCategories }: Props) {
   const [title, setTitle] = useState('')
   const [link, setLink] = useState('')
   const [phone, setPhone] = useState('')
@@ -36,10 +38,15 @@ export default function AddResourceModal({ visible, onClose, initialCategories }
   const [toastMessage, setToastMessage] = useState<string | null>(null)
 
   useEffect(() => {
-    // initialize available categories (filter out 'All')
-    setAvailable(initialCategories.filter(c => c !== 'All'))
-    setSelected([])
-  }, [initialCategories, visible])
+    if (!visible || !resource) return
+    setTitle(resource.title || '')
+    setLink(resource.link || '')
+    setPhone(resource.phone || '')
+    setDescription(resource.description || '')
+    setAvailable(availableCategories.filter(c => c !== 'All'))
+    setSelected(resource.categories || [])
+    setNewCat('')
+  }, [resource, visible, availableCategories])
 
   useEffect(() => {
     if (!visible) return
@@ -50,7 +57,7 @@ export default function AddResourceModal({ visible, onClose, initialCategories }
     return () => window.removeEventListener('keydown', onKey)
   }, [visible, onClose])
 
-  if (!visible) return null
+  if (!visible || !resource) return null
 
   const toggle = (c: string) => {
     setSelected(prev => (prev.includes(c) ? prev.filter(x => x !== c) : [...prev, c]))
@@ -72,31 +79,23 @@ export default function AddResourceModal({ visible, onClose, initialCategories }
     }
     setSubmitting(true)
     try {
-      const body = {
-        name: title,
+      const updates = {
+        title,
         description: description || undefined,
         link: link || undefined,
-        phone_number: phone || undefined,
+        phone: phone || undefined,
         categories: selected || []
       }
 
-      const res = await fetch(BACKEND_URL + '/api/resources', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-      })
-
-      if (!res.ok) throw new Error(await res.text())
-
-      await res.json()
-      setToastMessage('Resource submitted: pending moderation')
+      await onSave(resource.id!, updates)
+      setToastMessage('Resource updated successfully')
       window.setTimeout(() => {
         setToastMessage(null)
         onClose()
       }, 1200)
-    } catch (err) {
-      console.error('submit error', err)
-      setToastMessage('Failed to submit resource, please try again later.')
+    } catch (err: any) {
+      console.error('edit error', err)
+      setToastMessage(err?.message || 'Failed to update resource, please try again later.')
     } finally {
       setSubmitting(false)
     }
@@ -112,8 +111,8 @@ export default function AddResourceModal({ visible, onClose, initialCategories }
       <div className="ModalContent">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
           <div>
-            <div className="ModalTitle">Submit a Resource</div>
-            <div className="ModalSubtitle">When you submit a resource, it will be reviewed by moderators before appearing on the site.</div>
+            <div className="ModalTitle">Edit Resource</div>
+            <div className="ModalSubtitle">Update the resource information below</div>
           </div>
 
           <button className="ModalClose" onClick={onClose} aria-label="Close"><CloseIcon size={20} /></button>
@@ -158,7 +157,8 @@ export default function AddResourceModal({ visible, onClose, initialCategories }
           </div>
 
           <div style={{ display: 'flex', gap: 12, marginTop: 16, paddingBottom: 12 }}>
-            <button type="submit" disabled={submitting} className="AddResource">{submitting ? 'Submitting...' : 'Submit'}</button>
+            <button type="submit" disabled={submitting} className="AddResource">{submitting ? 'Saving...' : 'Save Changes'}</button>
+            <button type="button" onClick={onClose} disabled={submitting}>Cancel</button>
           </div>
         </form>
         {toastMessage && (
