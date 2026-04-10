@@ -582,6 +582,16 @@ input, textarea, select { background: #ffffff; color: #112; }
   transition: background 0.15s ease, transform 0.08s ease;
 }
 
+.AdminEditBtn {
+  background: #0b6fa0;
+  color: #fff;
+}
+
+.AdminEditBtn:hover {
+  background: #095080;
+  transform: scale(1.08);
+}
+
 .AdminApproveBtn {
   background: #27ae60;
   color: #fff;

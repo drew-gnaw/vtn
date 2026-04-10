@@ -5,6 +5,7 @@ import "../index.css";
 import BACKEND_URL from "../lib/backend";
 import CategoryList from "./CategoryList";
 import AddResourceModal from "./AddResourceModal";
+import EditResourceModal from "./EditResourceModal";
 import LoginModal from "./LoginModal";
 
 export default function ResourceList() {
@@ -21,6 +22,8 @@ export default function ResourceList() {
   const [pendingResources, setPendingResources] = useState<Resource[]>([]);
   const [isResourcesLoading, setIsResourcesLoading] = useState<boolean>(true);
   const [isPendingLoading, setIsPendingLoading] = useState<boolean>(false);
+  const [editingResource, setEditingResource] = useState<Resource | null>(null);
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
   // Check admin login status on mount
   useEffect(() => {
@@ -165,6 +168,56 @@ export default function ResourceList() {
           detail: err?.message || "Action failed",
         }),
       );
+    }
+  };
+
+  const handleEditResource = (resource: Resource) => {
+    if (adminView === "admin") {
+      setEditingResource(resource);
+      setShowEditModal(true);
+    }
+  };
+
+  const handleSaveEdit = async (resourceId: string, updates: Partial<Resource>) => {
+    let token = "";
+    try { token = localStorage.getItem("vtn:adminToken") || ""; } catch {}
+    try {
+      const res = await fetch(BACKEND_URL + "/api/admin", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          id: resourceId,
+          name: updates.title,
+          description: updates.description,
+          link: updates.link,
+          phone_number: updates.phone,
+          categories: updates.categories,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new Error(data?.error || res.statusText);
+      }
+      
+      setPendingResources((prev) =>
+        prev.map((r) =>
+          r.id === resourceId
+            ? {
+                ...r,
+                title: updates.title || r.title,
+                description: updates.description || r.description,
+                link: updates.link || r.link,
+                phone: updates.phone || r.phone,
+                categories: updates.categories || r.categories,
+              }
+            : r
+        )
+      );
+    } catch (err: any) {
+      throw new Error(err?.message || "Failed to save resource");
     }
   };
 
@@ -370,6 +423,18 @@ export default function ResourceList() {
             const adminButtons = adminView === "admin" && resource.id && (
               <div className="AdminActions">
                 <button
+                  className="AdminActionBtn AdminEditBtn"
+                  title="Edit"
+                  aria-label="Edit resource"
+                  onClick={(e: any) => {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    handleEditResource(resource);
+                  }}
+                >
+                  ✎
+                </button>
+                <button
                   className="AdminActionBtn AdminApproveBtn"
                   title="Approve"
                   aria-label="Approve resource"
@@ -435,6 +500,13 @@ export default function ResourceList() {
         visible={showAdd}
         onClose={() => setShowAdd(false)}
         initialCategories={uniqueCategories}
+      />
+      <EditResourceModal
+        visible={showEditModal}
+        resource={editingResource}
+        onClose={() => { setShowEditModal(false); setEditingResource(null); }}
+        onSave={handleSaveEdit}
+        availableCategories={uniqueCategories}
       />
       <LoginModal visible={showLogin} onClose={handleLoginClose} />
     </div>
