@@ -375,6 +375,7 @@ export default function ResourceList() {
                 </div>
               )}
               {sortedResources.map((resource, index) => {
+            const normalizedLink = normalizeResourceUrl(resource.link);
             const content = (
               <>
                 <div className="ResourceTitle">{resource.title}</div>
@@ -415,9 +416,9 @@ export default function ResourceList() {
             );
 
             const openLink = (e: any) => {
-              // allow normal link clicks to behave
               if (e?.target?.closest?.("a")) return;
-              window.open(resource.link, "_blank", "noopener");
+              if (!normalizedLink) return;
+              window.open(normalizedLink, "_blank", "noopener");
             };
 
             const adminButtons = adminView === "admin" && resource.id && (
@@ -464,19 +465,19 @@ export default function ResourceList() {
             return resource.link ? (
               <div
                 key={index}
-                className="ResourceCard ResourceCardClickable"
-                role="link"
-                tabIndex={0}
-                onClick={openLink}
-                onKeyDown={(e) => {
+                className={`ResourceCard ${adminView === "user" ? "ResourceCardClickable" : ""}`}
+                role={adminView === "user" ? "link" : undefined}
+                tabIndex={adminView === "user" ? 0 : undefined}
+                onClick={adminView === "user" ? openLink : undefined}
+                onKeyDown={adminView === "user" ? (e) => {
                   if (e.key === "Enter" || e.key === " ") openLink(e);
-                }}
+                } : undefined}
               >
                 {content}
                 <div>
                   <a
                     className="ResourceLink"
-                    href={resource.link}
+                    href={normalizedLink}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -521,4 +522,17 @@ function formatTel(phone?: string) {
   const trimmed = phone.trim();
   const leadingPlus = trimmed.startsWith("+") ? "+" : "";
   return leadingPlus + trimmed.replace(/[^0-9]/g, "");
+}
+
+function normalizeResourceUrl(link?: string) {
+  if (!link) return "";
+  const trimmed = link.trim();
+  if (!trimmed) return "";
+
+  // Keep explicit absolute/protocol URLs and protocol-relative URLs as-is.
+  if (/^[a-zA-Z][a-zA-Z\d+.-]*:/.test(trimmed) || trimmed.startsWith("//")) {
+    return trimmed;
+  }
+
+  return `https://${trimmed}`;
 }
