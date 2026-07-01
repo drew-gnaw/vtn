@@ -1,2 +1,2 @@
 # vtn
-Resources page for Veterans Transition Network
+Resources page for Veterans Transition Network.
