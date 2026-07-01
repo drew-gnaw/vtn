@@ -10,9 +10,11 @@ export default function handler(req: any, res: any) {
     }
 
     if (req.method !== "POST") return res.status(405).end();
-    const { password } = req.body;
+    const body = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+    const password = typeof body?.password === "string" ? body.password.trim() : "";
+    const adminPassword = (process.env.ADMIN_PASSWORD ?? "").trim();
 
-    if (password !== process.env.ADMIN_PASSWORD) {
+    if (password !== adminPassword) {
         return res.status(401).json({ error: "Invalid password" });
     }
 
